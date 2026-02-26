@@ -1,15 +1,15 @@
 # 📋 GoSMS SMS Top-Up Feature — Complete QA Assessment
 
-> **Product:** GoSMS | **Company:** MikeTango | **Integration:** QuickBooks Accounting System
-> **Document Type:** Full QA Session Analysis — README Reference
-> **Scope:** End-to-end QA planning, architecture analysis, failure modelling, test design
-> **Version:** 1.0 Final | **Status:** Submission Ready
+> **Product:** GoSMS | **Company:** MikeTango <br>**Integration:** QuickBooks Accounting System <br>
+> **Document Type:** Full QA Session Analysis — README Reference <br>
+> **Scope:** End-to-end QA planning, architecture analysis, failure modelling, test design <br>
+> **Status:** Submission Ready
 
 ---
 
 ## 📑 Table of Contents
 
-1. [Session Overview](#1-session-overview)
+1. [Overview](#1-overview)
 2. [Product & Feature Context](#2-product--feature-context)
 3. [Why This Feature Is Complex — Hidden Depths](#3-why-this-feature-is-complex--hidden-depths)
 4. [System Architecture — All 5 Layers](#4-system-architecture--all-5-layers)
@@ -26,22 +26,22 @@
 
 ---
 
-## 1. Session Overview
+## 1. Overview
 
-### 1.1 What This Session Was
+### 1.1 What This QA Assessment was.
 
-This session was a complete, professional-grade QA assessment of a real-world software feature — the **SMS Top-Up Workflow** in the **GoSMS** product built by **MikeTango**, integrated with **QuickBooks** as its accounting system.
+This QA Assessment was a complete, professional-grade QA assessment of a real-world software feature — the **SMS Top-Up Workflow** in the **GoSMS** product built by **MikeTango**, integrated with **QuickBooks** as its accounting system.
 
-The session was structured to simulate a real QA Engineer's approach to an interview technical assessment — beginning from raw feature understanding and progressing to submission-ready documentation, professional flowcharts, and a complete test case library.
+The QA Assessment was structured to simulate a real QA Engineer's approach to an interview technical assessment — beginning from raw feature understanding and progressing to submission-ready documentation, professional flowcharts, and a complete test case library.
 
-### 1.2 What Was Produced in This Session
+### 1.2 What Was Produced in This QA Assessment
 
 | Deliverable | Format | Content |
 |---|---|---|
 | QA Test Plan Document | `.docx` (Word) | 9 sections, title page, full professional formatting |
 | Professional Flowchart | `.html` | Complete decision tree with all paths, mitigations, state labels |
 | Test Case Tables | `.html` | 30 test cases, full card format, summary table |
-| README Analysis File | `.md` | This file — deep analysis of everything |
+| README File | `.md` | This file — QA Assessment overview|
 
 ### 1.3 The Core Workflow Being Tested
 
@@ -69,7 +69,7 @@ Finance Executive
 [Show Success]
 ```
 
-### 1.4 Phases Completed in This Session
+### 1.4 Phases Completed in This QA Assessment
 
 | Phase | Title | Output |
 |---|---|---|

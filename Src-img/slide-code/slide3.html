@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Executive Summary</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0F172A; /* Slate 900 */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .glass-card {
+            background-color: #1E293B; /* Slate 800 */
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #3B82F6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+        .icon-box {
+            background-color: #0F172A;
+            border: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Decor -->
+<div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-900 rounded-full opacity-5 translate-x-1/3 -translate-y-1/3"></div>
+<div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-900 rounded-full opacity-5 -translate-x-1/4 translate-y-1/4"></div>
+<!-- Header -->
+<header class="pt-10 px-16 flex justify-between items-end mb-8 z-10">
+<div>
+<div class="flex items-center space-x-3 mb-2">
+<div class="h-1 w-8 bg-blue-500 rounded-full"></div>
+<p class="text-blue-400 font-medium tracking-widest uppercase text-xs">Strategy &amp; Scope</p>
+</div>
+<h1 class="text-4xl font-poppins font-bold text-white">Executive Summary</h1>
+</div>
+<div class="text-right">
+<p class="text-gray-400 text-sm">QA Engineering Assessment</p>
+<p class="text-gray-500 text-xs mt-1">GoSMS Integration</p>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-16 pb-10 z-10">
+<div class="grid grid-cols-2 gap-6 h-full">
+<!-- Card 1: Objective -->
+<div class="glass-card rounded-2xl p-8 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-blue-500 opacity-5 rounded-bl-full -mr-4 -mt-4 transition-opacity group-hover:opacity-10"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="icon-box w-14 h-14 rounded-xl flex items-center justify-center text-blue-400">
+<i class="fa-solid fa-bullseye text-2xl"></i>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-wider">01</span>
+</div>
+<h3 class="text-xl font-poppins font-semibold text-white mb-3">Core Objective</h3>
+<p class="text-gray-400 text-sm leading-relaxed flex-1">
+                        Assure absolute financial and data integrity across the quotation generation and SMS crediting workflow. The primary goal is to prevent financial discrepancy and ensure atomic transaction success between GoSMS and QuickBooks.
+                    </p>
+</div>
+<!-- Card 2: Scope -->
+<div class="glass-card rounded-2xl p-8 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500 opacity-5 rounded-bl-full -mr-4 -mt-4 transition-opacity group-hover:opacity-10"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="icon-box w-14 h-14 rounded-xl flex items-center justify-center text-indigo-400">
+<i class="fa-solid fa-border-all text-2xl"></i>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-wider">02</span>
+</div>
+<h3 class="text-xl font-poppins font-semibold text-white mb-3">Assessment Scope</h3>
+<p class="text-gray-400 text-sm leading-relaxed flex-1">
+                        Comprehensive validation covering 5 distinct layers: User Interface inputs, complex Business Logic calculations, external QuickBooks API integration, Email Service delivery reliability, and Database transactional consistency.
+                    </p>
+</div>
+<!-- Card 3: Approach -->
+<div class="glass-card rounded-2xl p-8 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-teal-500 opacity-5 rounded-bl-full -mr-4 -mt-4 transition-opacity group-hover:opacity-10"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="icon-box w-14 h-14 rounded-xl flex items-center justify-center text-teal-400">
+<i class="fa-solid fa-chess-knight text-2xl"></i>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-wider">03</span>
+</div>
+<h3 class="text-xl font-poppins font-semibold text-white mb-3">Strategic Approach</h3>
+<p class="text-gray-400 text-sm leading-relaxed flex-1">
+                        Utilizing formal methods including State Transition Modeling and Failure Mode Analysis. The strategy emphasizes risk-driven testing, focusing on idempotency, concurrency handling, and fail-safe mechanisms for third-party integrations.
+                    </p>
+</div>
+<!-- Card 4: Outcomes -->
+<div class="glass-card rounded-2xl p-8 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-green-500 opacity-5 rounded-bl-full -mr-4 -mt-4 transition-opacity group-hover:opacity-10"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="icon-box w-14 h-14 rounded-xl flex items-center justify-center text-green-400">
+<i class="fa-solid fa-clipboard-check text-2xl"></i>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-wider">04</span>
+</div>
+<h3 class="text-xl font-poppins font-semibold text-white mb-3">Expected Outcomes</h3>
+<p class="text-gray-400 text-sm leading-relaxed flex-1">
+                        Delivery of a clear, robust logical flow design with defined atomicity requirements. A complete catalog of professional test cases covering happy paths and edge cases, accompanied by a prioritized Risk &amp; Mitigation Register.
+                    </p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="h-12 px-16 flex items-center justify-between border-t border-gray-800 bg-[#0F172A] z-20">
+<p class="text-xs text-gray-600">Confidential Assessment Material</p>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-gray-500">Page 03</span>
+<div class="w-16 h-1 bg-gray-800 rounded-full overflow-hidden">
+<div class="w-[15%] h-full bg-blue-600"></div>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

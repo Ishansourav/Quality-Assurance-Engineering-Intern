@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Core Workflow Analysis</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0F172A; /* Slate 900 */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .glass-panel {
+            background-color: rgba(30, 41, 59, 0.6); /* Slate 800 with opacity */
+            border: 1px solid #334155;
+            backdrop-filter: blur(8px);
+        }
+        .step-connector {
+            position: absolute;
+            top: 2rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #334155;
+            z-index: 0;
+        }
+        .step-connector-progress {
+            position: absolute;
+            top: 2rem;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 50%, #10B981 100%);
+            z-index: 0;
+            opacity: 0.3;
+        }
+        .step-node {
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .step-node:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Decor -->
+<div class="absolute top-20 left-10 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+<div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-900 rounded-full opacity-5 translate-x-1/4 translate-y-1/4"></div>
+<!-- Header -->
+<header class="pt-10 px-16 flex justify-between items-end mb-8 z-10">
+<div>
+<div class="flex items-center space-x-3 mb-2">
+<div class="h-1 w-8 bg-blue-500 rounded-full"></div>
+<p class="text-blue-400 font-medium tracking-widest uppercase text-xs">Process Analysis</p>
+</div>
+<h1 class="text-4xl font-poppins font-bold text-white">Core Workflow</h1>
+</div>
+<div class="text-right">
+<p class="text-gray-400 text-sm">QA Engineering Assessment</p>
+<p class="text-gray-500 text-xs mt-1">GoSMS Integration</p>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-16 pb-12 z-10 flex flex-col justify-between">
+<!-- Workflow Visualization -->
+<div class="w-full relative mt-4 mb-8">
+<!-- Labels -->
+<div class="absolute -top-8 left-0 text-xs font-semibold text-blue-400 uppercase tracking-wider">User Action Domain</div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-semibold text-purple-400 uppercase tracking-wider">System Integration Domain</div>
+<div class="absolute -top-8 right-0 text-xs font-semibold text-green-400 uppercase tracking-wider">Completion</div>
+<!-- Connector Lines -->
+<div class="step-connector"></div>
+<div class="step-connector-progress"></div>
+<!-- Steps Grid -->
+<div class="grid grid-cols-7 gap-4 relative">
+<!-- Step 1: Select Brand -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.3)] mb-4 relative">
+<i class="fa-solid fa-copyright text-blue-400 text-xl"></i>
+<div class="absolute -bottom-2 bg-blue-900 text-[10px] px-2 py-0.5 rounded text-blue-200">Start</div>
+</div>
+<h3 class="text-sm font-bold text-white text-center">Select Brand</h3>
+<p class="text-xs text-gray-500 text-center mt-1">User Input</p>
+</div>
+<!-- Step 2: Load Outlets -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-blue-500/70 flex items-center justify-center mb-4">
+<i class="fa-solid fa-store text-blue-300 text-xl"></i>
+</div>
+<h3 class="text-sm font-bold text-gray-200 text-center">Load Outlets</h3>
+<p class="text-xs text-gray-500 text-center mt-1">DB Query</p>
+</div>
+<!-- Step 3: Enter Top-Up -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-blue-500/70 flex items-center justify-center mb-4">
+<i class="fa-solid fa-money-bill-wave text-blue-300 text-xl"></i>
+</div>
+<h3 class="text-sm font-bold text-gray-200 text-center">Enter Top-Up</h3>
+<p class="text-xs text-gray-500 text-center mt-1">Validation</p>
+</div>
+<!-- Step 4: Generate Quotation (Critical) -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-purple-500 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.4)] mb-4 relative">
+<i class="fa-solid fa-file-invoice text-purple-400 text-xl"></i>
+<div class="absolute -top-2 -right-2 bg-purple-600 text-[9px] px-1.5 py-0.5 rounded-full text-white animate-pulse">API</div>
+</div>
+<h3 class="text-sm font-bold text-white text-center">Gen. Quotation</h3>
+<p class="text-xs text-purple-400 text-center mt-1">QuickBooks</p>
+</div>
+<!-- Step 5: Send Email -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-indigo-500/70 flex items-center justify-center mb-4">
+<i class="fa-solid fa-envelope text-indigo-300 text-xl"></i>
+</div>
+<h3 class="text-sm font-bold text-gray-200 text-center">Send Email</h3>
+<p class="text-xs text-gray-500 text-center mt-1">SMTP</p>
+</div>
+<!-- Step 6: Credit SMS -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-indigo-500/70 flex items-center justify-center mb-4">
+<i class="fa-solid fa-coins text-indigo-300 text-xl"></i>
+</div>
+<h3 class="text-sm font-bold text-gray-200 text-center">Credit SMS</h3>
+<p class="text-xs text-gray-500 text-center mt-1">DB Write</p>
+</div>
+<!-- Step 7: Success -->
+<div class="flex flex-col items-center step-node group">
+<div class="w-16 h-16 rounded-full bg-[#0F172A] border-2 border-green-500 flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.3)] mb-4">
+<i class="fa-solid fa-check text-green-400 text-2xl"></i>
+</div>
+<h3 class="text-sm font-bold text-white text-center">Success</h3>
+<p class="text-xs text-gray-500 text-center mt-1">Notify User</p>
+</div>
+</div>
+</div>
+<!-- Logic Contracts Section -->
+<div class="grid grid-cols-2 gap-8 mt-4 flex-1">
+<!-- Preconditions -->
+<div class="glass-panel rounded-xl p-6 border-l-4 border-blue-500">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/50 flex items-center justify-center text-blue-400">
+<i class="fa-solid fa-right-to-bracket"></i>
+</div>
+<h3 class="text-lg font-semibold text-white">Preconditions</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-circle-check text-blue-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">Valid Mapping:</strong> Every outlet must be mapped to a valid Company ID for billing.</p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-circle-check text-blue-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">Authentication:</strong> Finance Executive must have active session tokens.</p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-circle-check text-blue-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">System Status:</strong> QuickBooks API endpoint must be reachable (Health Check OK).</p>
+</div>
+</div>
+</div>
+<!-- Postconditions -->
+<div class="glass-panel rounded-xl p-6 border-l-4 border-purple-500">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-8 h-8 rounded-lg bg-purple-900/50 flex items-center justify-center text-purple-400">
+<i class="fa-solid fa-right-from-bracket"></i>
+</div>
+<h3 class="text-lg font-semibold text-white">Postconditions</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-check-double text-purple-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">Atomic Consistency:</strong> Quotation PDF generated equals SMS Credits applied.</p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-check-double text-purple-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">Audit Trail:</strong> Transaction logged with IDs from both GoSMS and QuickBooks.</p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fa-solid fa-check-double text-purple-500 text-xs mt-1.5"></i>
+<p class="text-sm text-gray-300"><strong class="text-white">Notification:</strong> Email delivered to client or queued in Dead Letter Queue (DLQ).</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="h-12 px-16 flex items-center justify-between border-t border-gray-800 bg-[#0F172A] z-20">
+<p class="text-xs text-gray-600">Confidential Assessment Material</p>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-gray-500">Page 05</span>
+<div class="w-16 h-1 bg-gray-800 rounded-full overflow-hidden">
+<div class="w-[25%] h-full bg-blue-600"></div>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

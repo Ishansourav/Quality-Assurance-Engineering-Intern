@@ -1,5 +1,7 @@
 # 📋 GoSMS SMS Top-Up Feature — Complete QA Assessment
 
+![QA Assessment Cover](https://raw.githubusercontent.com/Ishansourav/Quality-Assurance-Engineering-Intern/main/QA-Assessment-Intern.png)
+
 > **Product:** GoSMS | **Company:** MikeTango <br>**Integration:** QuickBooks Accounting System <br>
 > **Document Type:** Full QA Session Analysis — README Reference <br>
 > **Scope:** End-to-end QA planning, architecture analysis, failure modelling, test design <br>

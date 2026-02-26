@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoSMS SMS Top-Up — Professional QA Flowchart</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0D1B2A;
+    color: #E8EDF2;
+    padding: 30px 20px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4A9FE7;
+    letter-spacing: 1px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: #7A9BB5;
+    margin-top: 6px;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: #1B3A6B;
+    border: 1px solid #2E5FA3;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: #90C2F0;
+  }
+
+  /* ── LEGEND ───────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #A0B8CC;
+  }
+  .legend-box {
+    width: 28px;
+    height: 18px;
+    border-radius: 3px;
+    border: 2px solid;
+  }
+
+  /* ── FLOW CONTAINER ──────────────────────────────────────── */
+  .flow-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+
+  /* ── NODES ──────────────────────────────────────────────── */
+  .node {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .box {
+    width: 440px;
+    padding: 13px 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 2;
+    cursor: default;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .box:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  }
+  .box .state-badge {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.75;
+    display: block;
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Node types */
+  .start-end {
+    background: linear-gradient(135deg, #1B4F2B, #27AE60);
+    border: 2px solid #2ECC71;
+    color: #AFFFCA;
+    border-radius: 28px;
+    width: 200px;
+    font-size: 15px;
+  }
+  .process {
+    background: linear-gradient(135deg, #1A3A6B, #2E5FA3);
+    border: 2px solid #4A90D9;
+    color: #D6EAFF;
+  }
+  .decision {
+    background: linear-gradient(135deg, #4A2800, #E67E22);
+    border: 2px solid #F39C12;
+    color: #FFF3E0;
+    transform: none;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    width: 340px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    font-size: 12px;
+  }
+  .decision:hover {
+    transform: scale(1.03);
+  }
+  .error-node {
+    background: linear-gradient(135deg, #4A0000, #C0392B);
+    border: 2px solid #E74C3C;
+    color: #FFD5D5;
+    width: 260px;
+  }
+  .success-node {
+    background: linear-gradient(135deg, #1B4F2B, #27AE60);
+    border: 2px solid #2ECC71;
+    color: #AFFFCA;
+    width: 260px;
+  }
+  .info-node {
+    background: linear-gradient(135deg, #1A1A3E, #6C3483);
+    border: 2px solid #9B59B6;
+    color: #E8D5FF;
+    width: 340px;
+    font-size: 12px;
+  }
+
+  /* ── CONNECTORS ─────────────────────────────────────────── */
+  .connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+  .line {
+    width: 2px;
+    background: #2E5FA3;
+    position: relative;
+  }
+  .line.short { height: 20px; }
+  .line.med   { height: 32px; }
+  .line.tall  { height: 50px; }
+
+  .arrow-head {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 12px solid #2E5FA3;
+  }
+  .arrow-head.green  { border-top-color: #27AE60; }
+  .arrow-head.red    { border-top-color: #E74C3C; }
+  .arrow-head.orange { border-top-color: #E67E22; }
+
+  /* ── BRANCH ROW ─────────────────────────────────────────── */
+  .branch-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+  }
+
+  .branch-yes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 460px;
+  }
+  .branch-no {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 220px;
+    position: relative;
+  }
+
+  .branch-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+  }
+  .yes-label {
+    background: #1B4F2B;
+    color: #2ECC71;
+    border: 1px solid #27AE60;
+  }
+  .no-label {
+    background: #4A0000;
+    color: #E74C3C;
+    border: 1px solid #C0392B;
+  }
+
+  /* Horizontal line for branch */
+  .h-line {
+    height: 2px;
+    background: #2E5FA3;
+    position: absolute;
+    top: 0;
+  }
+
+  /* ── ANNOTATION BLOCKS ───────────────────────────────────── */
+  .annotation {
+    border-left: 3px solid #E67E22;
+    background: rgba(74,41,0,0.4);
+    padding: 8px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 11px;
+    color: #F0D4A0;
+    margin: 6px 0;
+    width: 440px;
+    line-height: 1.5;
+  }
+  .annotation.green-ann {
+    border-left-color: #27AE60;
+    background: rgba(27,79,43,0.4);
+    color: #A0F0BE;
+  }
+  .annotation.red-ann {
+    border-left-color: #E74C3C;
+    background: rgba(74,0,0,0.4);
+    color: #F0A0A0;
+  }
+  .annotation.purple-ann {
+    border-left-color: #9B59B6;
+    background: rgba(42,0,74,0.3);
+    color: #E8D5FF;
+  }
+  .ann-title {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+
+  /* ── SECTION DIVIDERS ────────────────────────────────────── */
+  .section-label {
+    background: #1B3A6B;
+    border: 1px solid #2E5FA3;
+    color: #90C2F0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 20px;
+    border-radius: 12px;
+    margin: 12px 0 8px;
+  }
+
+  /* ── SIDE PANELS ─────────────────────────────────────────── */
+  .full-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+  }
+  .side-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 220px;
+    font-size: 11px;
+  }
+  .side-card {
+    background: rgba(27,59,107,0.4);
+    border: 1px solid #2E5FA3;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    color: #A0C4E8;
+    line-height: 1.5;
+  }
+  .side-card .sc-title {
+    font-weight: 700;
+    color: #4A9FE7;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+  }
+
+  /* rollback arrow — visual indicator */
+  .rollback-indicator {
+    background: rgba(74,0,0,0.5);
+    border: 1px dashed #E74C3C;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 11px;
+    color: #F0A0A0;
+    text-align: center;
+    width: 320px;
+    margin: 6px 0;
+  }
+  .rollback-indicator b { color: #FF6B6B; }
+
+  .spacer { height: 16px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════════ -->
+<div class="page-header">
+  <h1>GoSMS — SMS Top-Up Feature</h1>
+  <p>Professional QA Flowchart with Failure Paths, State Transitions &amp; Mitigation Logic</p>
+  <div class="meta-row">
+    <span class="meta-pill">Product: GoSMS</span>
+    <span class="meta-pill">Company: MikeTango</span>
+    <span class="meta-pill">Integration: QuickBooks</span>
+    <span class="meta-pill">Prepared By: QA Engineer Candidate</span>
+  </div>
+</div>
+
+<!-- ═══ LEGEND ════════════════════════════════════════════════════════════ -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-box" style="background:#1B4F2B;border-color:#2ECC71;border-radius:10px;"></div>
+    <span>Start / End / Success</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-box" style="background:#1A3A6B;border-color:#4A90D9;"></div>
+    <span>Process Step</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-box" style="background:#4A2800;border-color:#F39C12;"></div>
+    <span>Decision / Validation Gate</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-box" style="background:#4A0000;border-color:#E74C3C;"></div>
+    <span>Error / Failure State</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-box" style="background:#1A1A3E;border-color:#9B59B6;"></div>
+    <span>Mitigation / Recovery Action</span>
+  </div>
+</div>
+
+<!-- ═══ MAIN FLOW ═════════════════════════════════════════════════════════ -->
+<div class="flow-container">
+
+  <!-- START -->
+  <div class="node">
+    <div class="box start-end">▶ START<span class="state-badge">S0 — INITIAL STATE</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- AUTH CHECK -->
+  <div class="section-label">LAYER 1 — UI / AUTHENTICATION</div>
+  <div class="node">
+    <div class="box process">🔐 Finance Executive Authentication<span class="state-badge">Validate Session &amp; Role Permissions</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Authenticated? -->
+  <div class="node">
+    <div class="box decision">Is User<br>Authenticated &amp; Authorised?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <!-- YES branch -->
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+      <div class="box process">📋 Load Brand Dropdown<span class="state-badge">Fetch available brands from DB</span></div>
+    </div>
+    <!-- NO branch -->
+    <div class="branch-no" style="margin-left:20px;padding-top:30px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node">⛔ Redirect to Login<span class="state-badge">S8 — ERROR</span></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Brand Selected? -->
+  <div class="node">
+    <div class="box decision">Brand<br>Selected?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES → S1</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+      <div class="box process">📦 Load Outlets for Selected Brand<span class="state-badge">S2 — OUTLETS LOADED</span></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node">⚠ "Please select a Brand"<span class="state-badge">Inline Error — No API call</span></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Outlets Loaded? -->
+  <div class="node">
+    <div class="box decision">Outlets<br>Loaded Successfully?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+      <div class="box process">✏️ Finance Executive Enters Top-Up Per Outlet<span class="state-badge">S3 — TOP-UP ENTERED</span></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node">⚠ "Failed to load outlets"<span class="state-badge">S8 — Offer retry button</span></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- SECTION: VALIDATION -->
+  <div class="section-label">LAYER 2 — BUSINESS LOGIC &amp; VALIDATION</div>
+
+  <div class="node">
+    <div class="box process">🔒 Finance Executive Clicks Submit<br><small style="font-size:10px;font-weight:400;">→ Submit button DISABLED immediately (prevent double-click TC26)</small></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Fields Valid? -->
+  <div class="node">
+    <div class="box decision">All Fields<br>Pass Validation?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node" style="width:220px;font-size:11px;">⚠ Highlight invalid fields<br>Re-enable Submit button<span class="state-badge">S8 | TC05–TC12</span></div>
+    </div>
+  </div>
+
+  <div class="node" style="margin-top:4px;">
+    <div class="annotation">
+      <div class="ann-title">⚙ VALIDATION RULES CHECKED:</div>
+      Empty fields | Negative values | Text/special chars | Zero total | Decimal precision | Overflow | Injection attempts
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Total > 0? -->
+  <div class="node">
+    <div class="box decision">Total<br>Amount > 0 ?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES → S4</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node" style="width:220px;font-size:11px;">⚠ "Total must be > 0"<br>Re-enable Submit<span class="state-badge">TC07</span></div>
+    </div>
+  </div>
+
+  <div class="node" style="margin-top:4px;">
+    <div class="box process">🔑 Generate Unique Transaction ID<span class="state-badge">S4 — VALIDATED | Idempotency Key Assigned</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <div class="node">
+    <div class="box process">🗺 Validate Outlet → Company Mapping<span class="state-badge">Confirm mapping before any write | TC29, TC30</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- SECTION: QUICKBOOKS -->
+  <div class="section-label">LAYER 3 — QUICKBOOKS API INTEGRATION</div>
+
+  <div class="node">
+    <div class="box process">📡 Call QuickBooks API<br><small style="font-size:10px;font-weight:400;">→ Send: Transaction ID, Brand, Total, Client Info, Item Lines per Company</small></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: API Available? -->
+  <div class="node">
+    <div class="box decision">QuickBooks<br>API Available?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO / TIMEOUT</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head orange"></div></div>
+      <div class="box info-node" style="width:210px;font-size:11px;">🔁 Retry Logic<br>Attempt 1 → Wait 2s<br>Attempt 2 → Wait 5s<br>Attempt 3 → Wait 10s<span class="state-badge">TC13, TC14</span></div>
+    </div>
+  </div>
+
+  <div class="node" style="margin-top:4px;">
+    <div class="annotation red-ann">
+      <div class="ann-title">❌ IF ALL 3 RETRIES FAIL:</div>
+      Abort entire flow → No email sent → No SMS credit applied → Admin alert triggered → User shown error with Transaction ID
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Duplicate check -->
+  <div class="node">
+    <div class="box decision">Duplicate<br>Transaction ID Exists?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label no-label">YES — DUPLICATE</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box info-node" style="width:210px;font-size:11px;">↩ Return existing Quotation ID<br>Do NOT create new invoice<span class="state-badge">TC16 — Idempotency</span></div>
+    </div>
+    <div class="branch-yes" style="margin-left:20px;">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">NO — UNIQUE</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Quotation Created? -->
+  <div class="node">
+    <div class="box decision">Quotation<br>Created Successfully?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES → S5</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="box error-node" style="width:220px;font-size:11px;">⛔ Abort Flow<br>Log error + Transaction ID<br>Do NOT credit SMS<span class="state-badge">S8 | TC15</span></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- SECTION: EMAIL -->
+  <div class="section-label">LAYER 4 — EMAIL SERVICE (NON-BLOCKING)</div>
+
+  <div class="node">
+    <div class="box process">📧 Trigger Email to Client<br><small style="font-size:10px;font-weight:400;">→ Fetch client email from QuickBooks record → Build email with quotation details</small></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- DECISION: Email Sent? -->
+  <div class="node">
+    <div class="box decision">Email<br>Sent Successfully?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES → S6</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head orange"></div></div>
+      <div class="box info-node" style="width:220px;font-size:11px;">⚠ Log failure<br>Add to retry queue<br>Notify Finance Executive<br><b>→ CONTINUE to Credit Step</b><span class="state-badge">TC18, TC19 — NON-BLOCKING</span></div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <!-- SECTION: DB CREDIT -->
+  <div class="section-label">LAYER 5 — DATABASE / SMS CREDIT WRITE</div>
+
+  <div class="node">
+    <div class="box process">🗄 Open Atomic DB Transaction<span class="state-badge">BEGIN TRANSACTION — All writes or none</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <div class="node">
+    <div class="box process">💳 Write SMS Credits Per Company<span class="state-badge">S7 — Company A: +X | Company B: +Y | Company N: +Z</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <div class="node">
+    <div class="annotation purple-ann">
+      <div class="ann-title">🔒 CONCURRENCY PROTECTION (TC27):</div>
+      Row-level locking (SELECT FOR UPDATE) on company credit records prevents race conditions during simultaneous multi-user submission.
+    </div>
+  </div>
+
+  <!-- DECISION: Credit Write Success? -->
+  <div class="node">
+    <div class="box decision">All Credit<br>Writes Succeeded?</div>
+  </div>
+
+  <div class="branch-row" style="margin-top:0;">
+    <div class="branch-yes">
+      <div class="connector"><div class="line short"></div></div>
+      <div class="branch-label yes-label">YES → S7</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+    </div>
+    <div class="branch-no" style="margin-left:20px;padding-top:28px;">
+      <div class="branch-label no-label" style="margin-left:10px;">NO</div>
+      <div class="connector"><div class="line short"></div><div class="arrow-head red"></div></div>
+      <div class="rollback-indicator">
+        🔄 <b>ROLLBACK TRIGGERED</b><br>
+        Reverse ALL credit writes<br>
+        Restore pre-transaction state<br>
+        Log: Status = ROLLED_BACK + Tx ID<br>
+        <span style="font-size:10px;color:#FF9999;">TC21 | TC22 | TC23 | TC25</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <div class="node">
+    <div class="box process">✅ COMMIT Transaction<br><small style="font-size:10px;font-weight:400;">→ Write audit log entry with Tx ID, user, amounts, timestamp, status=SUCCESS</small></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head"></div></div>
+
+  <div class="node">
+    <div class="box process">🔓 Re-enable Submit Button<span class="state-badge">Allow new submission — TC26 protection lifted</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+
+  <!-- SUCCESS -->
+  <div class="node">
+    <div class="box success-node">✅ SUCCESS<span class="state-badge">S9 — Display Transaction ID + Summary to Finance Executive</span></div>
+  </div>
+  <div class="connector"><div class="line short"></div><div class="arrow-head green"></div></div>
+
+  <!-- END -->
+  <div class="node">
+    <div class="box start-end" style="background:linear-gradient(135deg,#1B4F2B,#27AE60);">⏹ END<span class="state-badge">TRANSACTION COMPLETE</span></div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- ── STATE TABLE ───────────────────────────────────────────────── -->
+  <div class="section-label" style="margin-top:30px;">STATE TRANSITION QUICK REFERENCE</div>
+  <div style="width:100%;max-width:860px;margin:10px auto 0;overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:#1B3A6B;">
+          <th style="padding:8px 12px;text-align:left;color:#90C2F0;border:1px solid #2E5FA3;">State</th>
+          <th style="padding:8px 12px;text-align:left;color:#90C2F0;border:1px solid #2E5FA3;">Name</th>
+          <th style="padding:8px 12px;text-align:left;color:#90C2F0;border:1px solid #2E5FA3;">Valid Next</th>
+          <th style="padding:8px 12px;text-align:left;color:#90C2F0;border:1px solid #2E5FA3;">Error Next</th>
+          <th style="padding:8px 12px;text-align:left;color:#90C2F0;border:1px solid #2E5FA3;">Key Test Cases</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#0F2035;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S0</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Initial</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S1</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC04</td>
+        </tr>
+        <tr style="background:#0D1825;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S1</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Brand Selected</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S2</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC04</td>
+        </tr>
+        <tr style="background:#0F2035;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S2</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Outlets Loaded</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S3</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC30</td>
+        </tr>
+        <tr style="background:#0D1825;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S3</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Top-Up Entered</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S4</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC05–TC12</td>
+        </tr>
+        <tr style="background:#0F2035;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S4</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Validated + Tx ID</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S5</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC06, TC07, TC09</td>
+        </tr>
+        <tr style="background:#0D1825;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S5</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Quotation Created</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S6</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC13–TC17</td>
+        </tr>
+        <tr style="background:#0F2035;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S6</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Email Sent</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S7</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FFA500;">S8* (non-blocking)</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC18, TC19, TC20</td>
+        </tr>
+        <tr style="background:#0D1825;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#4A9FE7;font-weight:700;">S7</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">SMS Credited</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">S9</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">S8 + ROLLBACK</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC21–TC25</td>
+        </tr>
+        <tr style="background:#0F2035;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF6B6B;font-weight:700;">S8</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Error State</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">—</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">Terminal (re-enable form)</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">All error TCs</td>
+        </tr>
+        <tr style="background:#0D1825;">
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;font-weight:700;">S9</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#D0E8FF;">Success</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#90EE90;">Terminal</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#FF9999;">—</td>
+          <td style="padding:7px 12px;border:1px solid #1B3A6B;color:#C0C8D0;">TC01, TC02, TC03</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;margin-top:30px;font-size:11px;color:#4A6A8A;padding-bottom:20px;">
+    GoSMS QA Test Plan — Flowchart &amp; State Reference | MikeTango / QuickBooks Integration | QA Engineer Candidate
+  </div>
+
+</div>
+</body>
+</html>

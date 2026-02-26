@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoSMS — Complete Test Case Tables</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #F0F4FA;
+    color: #1B1B2F;
+    padding: 30px 20px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #1B3A6B, #2E5FA3);
+    color: white;
+    padding: 28px 36px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+  }
+  .page-header h1 { font-size: 24px; font-weight: 700; }
+  .page-header p  { font-size: 13px; opacity: 0.8; margin-top: 6px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+  .meta-pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 16px;
+    padding: 3px 12px;
+    font-size: 11px;
+  }
+
+  /* ── CATEGORY HEADER ─────────────── */
+  .cat-header {
+    background: linear-gradient(135deg, #1B3A6B, #34495E);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cat-count {
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 11px;
+  }
+
+  /* ── TEST CASE CARD ──────────────── */
+  .tc-card {
+    background: white;
+    border: 1px solid #D0DCF0;
+    border-top: none;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+  .tc-card + .tc-card { border-top: 1px solid #E8EEF8; }
+  .tc-card:last-child { border-radius: 0 0 8px 8px; }
+
+  .tc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 20px;
+    border-bottom: 1px solid #E8EEF8;
+    background: #F8FAFE;
+  }
+  .tc-id {
+    background: #1B3A6B;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .tc-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1B3A6B;
+    flex: 1;
+  }
+  .priority-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  .p-critical { background: #FFEBEB; color: #C0392B; border: 1px solid #E74C3C; }
+  .p-high     { background: #FFF3E8; color: #E67E22; border: 1px solid #E67E22; }
+  .p-medium   { background: #FFFCE8; color: #B7950B; border: 1px solid #D4AC0D; }
+  .p-low      { background: #EAFAF1; color: #1E8449; border: 1px solid #27AE60; }
+
+  .tc-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .tc-field {
+    padding: 10px 18px;
+    border-right: 1px solid #E8EEF8;
+    border-bottom: 1px solid #E8EEF8;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .tc-field:nth-child(even) { border-right: none; }
+  .tc-field.full-width {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #4A90D9;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .field-value {
+    color: #2D3748;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .field-value code {
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    border-radius: 3px;
+    padding: 0px 5px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #3730A3;
+  }
+
+  /* Steps as numbered list */
+  .steps-list { margin: 0; padding-left: 0; list-style: none; }
+  .steps-list li {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #2D3748;
+    line-height: 1.5;
+  }
+  .step-num {
+    background: #1B3A6B;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Expected result highlight */
+  .expected-box {
+    background: #EAFAF1;
+    border-left: 3px solid #27AE60;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #1E5631;
+    line-height: 1.6;
+  }
+  .fail-box {
+    background: #FEEBEB;
+    border-left: 3px solid #E74C3C;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #7B241C;
+    line-height: 1.6;
+  }
+  .notes-box {
+    background: #FFF8E8;
+    border-left: 3px solid #E67E22;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #6E2F0A;
+    line-height: 1.6;
+  }
+
+  /* ── SUMMARY TABLE ─────────────── */
+  .summary-section { margin-top: 48px; }
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    font-size: 12px;
+  }
+  .summary-table thead tr {
+    background: #1B3A6B;
+    color: white;
+  }
+  .summary-table th {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+  .summary-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #E8EEF8;
+    color: #2D3748;
+    vertical-align: middle;
+  }
+  .summary-table tr:nth-child(even) { background: #F5F8FF; }
+  .summary-table tr:last-child td { border-bottom: none; font-weight: 700; background: #E8F0FF; }
+
+  .state-chip {
+    font-family: monospace;
+    font-size: 11px;
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #3730A3;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: #7A90B0;
+    padding-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <h1>GoSMS SMS Top-Up — Complete Test Case Tables</h1>
+  <p>30 Test Cases | 7 Categories | Full Detail: Preconditions, Steps, Expected Results, State Transitions</p>
+  <div class="meta-row">
+    <span class="meta-pill">Product: GoSMS</span>
+    <span class="meta-pill">Company: MikeTango</span>
+    <span class="meta-pill">Integration: QuickBooks</span>
+    <span class="meta-pill">10 Critical | 15 High | 5 Medium</span>
+    <span class="meta-pill">QA Engineer Candidate</span>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 1: HAPPY PATH ══════════════════════════════════════════════ -->
+<div class="cat-header">✅ CATEGORY 1 — Functional / Happy Path <span class="cat-count">TC01–TC03</span></div>
+
+<!-- TC01 -->
+<div class="tc-card">
+  <div class="tc-header">
+    <span class="tc-id">TC01</span>
+    <span class="tc-title">Complete Valid End-to-End Transaction</span>
+    <span class="priority-badge p-critical">CRITICAL</span>
+  </div>
+  <div class="tc-body">
+    <div class="tc-field">
+      <div class="field-label">Category</div>
+      <div class="field-value">Functional — Happy Path</div>
+    </div>
+    <div class="tc-field">
+      <div class="field-label">State Transition</div>
+      <div class="field-value"><span class="state-chip">S0→S1→S2→S3→S4→S5→S6→S7→S9</span></div>
+    </div>
+    <div class="tc-field full-width">
+      <div class="field-label">Precondition</div>
+      <div class="field-value">Finance Executive is authenticated. Brand with ≥3 Outlets across 2+ Companies exists in DB. QuickBooks API live and connected. SMTP service active. Database accessible with write permissions.</div>
+    </div>
+    <div class="tc-field full-width">
+      <div class="field-label">Test Steps</div>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span>Navigate to the SMS Top-Up module as Finance Executive</li>
+        <li><span class="step-num">2</span>Select a valid Brand from the dropdown</li>
+        <li><span class="step-num">3</span>Verify all outlets for that Brand are displayed with correct names</li>
+        <li><span class="step-num">4</span>Enter valid positive integer top-up amounts for each outlet (e.g., 100, 200, 150)</li>
+        <li><span class="step-num">5</span>Verify the running total is correctly calculated and displayed</li>
+        <li><span class="step-num">6</span>Click Submit / Next</li>
+        <li><span class="step-num">7</span>Observe loading state — confirm Submit button is disabled</li>
+        <li><span class="step-num">8</span>Confirm QuickBooks receives API call with correct payload amount</li>
+        <li><span class="step-num">9</span>Verify quotation created in QuickBooks with correct total and client</li>
+        <li><span class="step-num">10</span>Confirm confirmation email received at client email address</li>
+        <li><span class="step-num">11</span>Query DB: verify each Company's SMS credit balance increased by correct amount per mapping</li>
+        <li><span class="step-num">12</span>Verify transaction audit log entry created with correct Transaction ID, amounts, and status=SUCCESS</li>
+      </ul>
+    </div>
+    <div class="tc-field full-width">
+      <div class="field-label">Expected Result</div>
+      <div class="expected-box">Quotation created in QuickBooks matching exact total. Confirmation email received with accurate details. Each Company's SMS balance increases by the sum of its mapped outlets' amounts only. Transaction log entry exists with unique Transaction ID. Success screen displays with Transaction ID and correct summary. Submit button re-enabled.</div>
+    </div>
+    <div class="tc-field">
+      <div class="field-label">Failure Point Ref</div>
+      <div class="field-value">None — positive path</div>
+    </div>
+    <div class="tc-field">
+      <div class="field-label">Notes / Edge Cases</div>
+      <div class="notes-box">Verify credit amounts at DB level, not just UI. Cross-check QuickBooks invoice amount against sum of all top-up inputs. This is the baseline regression test.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TC02 -->
+<div class="tc-card">
+  <div class="tc-header">
+    <span class="tc-id">TC02</span>
+    <span class="tc-title">Valid Transaction — Single Outlet, Single Company</span>
+    <span class="priority-badge p-high">HIGH</span>
+  </div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Functional — Boundary Happy Path</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S0→S1→S2→S3→S4→S5→S6→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand with exactly 1 Outlet belonging to exactly 1 Company. All services active.</div></div>
+    <div class="tc-field full-width">
+      <div class="field-label">Test Steps</div>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span>Select the Brand with a single outlet</li>
+        <li><span class="step-num">2</span>Confirm exactly 1 outlet is displayed — no more</li>
+        <li><span class="step-num">3</span>Enter valid top-up amount: 500</li>
+        <li><span class="step-num">4</span>Submit and observe full flow</li>
+        <li><span class="step-num">5</span>Query DB: confirm only the single company balance changed</li>
+      </ul>
+    </div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Quotation created for 500. Email sent. Only that one Company's balance increases by 500. No other company's balance is modified in any way.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP09 — Mapping</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Validates mapping logic for the minimal case. Tests that no cross-contamination occurs when only one company is involved.</div></div>
+  </div>
+</div>
+
+<!-- TC03 -->
+<div class="tc-card">
+  <div class="tc-header">
+    <span class="tc-id">TC03</span>
+    <span class="tc-title">Valid Transaction — Maximum Outlets Per Brand</span>
+    <span class="priority-badge p-medium">MEDIUM</span>
+  </div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Functional — Volume / Boundary</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S0→S1→S2→S3→S4→S5→S6→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand configured with maximum supported number of outlets (e.g. 50). All services active.</div></div>
+    <div class="tc-field full-width">
+      <div class="field-label">Test Steps</div>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span>Select Brand with maximum outlets — observe page load time</li>
+        <li><span class="step-num">2</span>Enter valid top-up amounts for every outlet</li>
+        <li><span class="step-num">3</span>Submit and observe full flow including aggregation time</li>
+        <li><span class="step-num">4</span>Verify all outlet credits appear in DB for their respective companies</li>
+      </ul>
+    </div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">All outlets' credits applied to correct companies. No page timeout. No aggregation error. Total correctly calculated across all outlets. No outlet silently skipped.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP07 — Aggregation</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Also monitors UI performance — all outlets must render within an acceptable time threshold. Log aggregation time for performance baseline.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 2: INPUT VALIDATION ════════════════════════════════════════ -->
+<div class="cat-header">⚠️ CATEGORY 2 — Input Validation <span class="cat-count">TC04–TC12</span></div>
+
+<!-- TC04 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC04</span><span class="tc-title">No Brand Selected — Submit Attempt</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S0→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Finance Executive on Top-Up module. Brand dropdown at empty/default state.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Leave Brand dropdown at default (empty/placeholder)</li><li><span class="step-num">2</span>Click Submit/Next</li><li><span class="step-num">3</span>Open browser DevTools → Network tab — observe requests</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Submission blocked immediately. Inline error displayed: "Please select a Brand." Zero network requests fired to QuickBooks. No outlet list loads. No DB write occurs. Submit button remains active for retry.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP01</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Critical first gate. Verify using DevTools that zero API calls are made. Error message must be visible without scrolling.</div></div>
+  </div>
+</div>
+
+<!-- TC05 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC05</span><span class="tc-title">Empty Top-Up Field — One or More Fields Left Blank</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand selected. Outlets loaded. At least 3 outlets visible.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter valid amounts in all fields except the last → Submit</li><li><span class="step-num">2</span>Reset → Enter valid amounts in all except the first → Submit</li><li><span class="step-num">3</span>Reset → Enter valid amounts in all except a middle field → Submit</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">In all 3 variants: submission blocked. Only the empty field is highlighted in red. All other valid fields retain their entered values (not reset). Error message field-specific. No API call made.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP03</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">UX defect: resetting all fields on partial validation error is a separate logged defect. Test each position independently.</div></div>
+  </div>
+</div>
+
+<!-- TC06 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC06</span><span class="tc-title">Negative Number Input</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand selected. Outlets loaded.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter -500 in a top-up field → Submit</li><li><span class="step-num">2</span>Repeat with -0.01</li><li><span class="step-num">3</span>Repeat with -1</li><li><span class="step-num">4</span>Attempt to bypass client-side by sending negative value directly via API tool (Postman)</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">All negative values rejected. Client-side: field highlighted, error shown. Server-side: negative value rejected even if client-side bypassed. Error: "Top-up amount must be a positive number." No API call to QuickBooks made.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP04</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Server-side validation must be tested independently. A system relying only on client-side validation is a security defect.</div></div>
+  </div>
+</div>
+
+<!-- TC07 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC07</span><span class="tc-title">Zero Value in All Fields</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter 0 in all top-up fields → Submit</li><li><span class="step-num">2</span>Enter valid value in one field, 0 in all others → Submit</li><li><span class="step-num">3</span>Verify total gate activates</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">For all-zeros: Error "Total top-up must be greater than zero." No API call. For mix (one value + zeros): if total > 0 then submission should proceed for non-zero fields. Verify business rule on this edge case.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP06</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Clarify business rule: should outlets with 0 top-up be excluded or should zero entries be disallowed entirely? Document assumption before testing.</div></div>
+  </div>
+</div>
+
+<!-- TC08 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC08</span><span class="tc-title">Text / Alphabetic Input in Top-Up Field</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter "abc" → Submit</li><li><span class="step-num">2</span>Enter "12abc" → Submit</li><li><span class="step-num">3</span>Enter "abc12" → Submit</li><li><span class="step-num">4</span>Enter "1e5" (scientific notation) → Submit</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">All text values rejected. Either: (a) Input field rejects non-numeric in real time (preferred), or (b) Validation error on submit: "Amount must be a numeric value." No API call. Scientific notation should be rejected or handled explicitly.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP05</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Test "1e5" specifically — some numeric parsers accept scientific notation which could cause unexpected large values to pass through.</div></div>
+  </div>
+</div>
+
+<!-- TC09 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC09</span><span class="tc-title">Special Character / Injection Attempt</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation — Security</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> → Submit</li><li><span class="step-num">2</span>Enter <code>1; DROP TABLE credits;--</code> → Submit</li><li><span class="step-num">3</span>Enter <code>' OR '1'='1</code> → Submit</li><li><span class="step-num">4</span>Enter <code>&amp;amp;&lt;&gt;"</code> → Submit</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">All injected values rejected by both client-side and server-side validation. No script executes in browser. No SQL executes in DB. No API call made. Inputs are sanitised. System logs the attempt without crashing.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP05</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Critical security test. Must be verified at server level. All DB operations must use parameterised queries. XSS must be prevented in rendering.</div></div>
+  </div>
+</div>
+
+<!-- TC10 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC10</span><span class="tc-title">Decimal Precision Edge Cases</span><span class="priority-badge p-medium">MEDIUM</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation — Boundary</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S4 or S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter 100.999 in one field → Submit</li><li><span class="step-num">2</span>Enter 0.001 in another → Submit</li><li><span class="step-num">3</span>Enter 99.999999 → Submit</li><li><span class="step-num">4</span>Verify QuickBooks invoice amount matches system total</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">System either (a) rounds to 2dp and notifies user before confirming, or (b) rejects with "Maximum 2 decimal places allowed." No silent rounding. QuickBooks invoice total exactly matches system-computed total. DB credit reflects same precision.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP07</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Float precision mismatch between system total and QuickBooks invoice is a financial discrepancy defect. Document expected precision handling before test.</div></div>
+  </div>
+</div>
+
+<!-- TC11 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC11</span><span class="tc-title">Overflow / Extremely Large Number</span><span class="priority-badge p-medium">MEDIUM</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation — Boundary</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter 9999999999 (ten digits) → Submit</li><li><span class="step-num">2</span>Enter MAX+1 (one above business-defined limit) → Submit</li><li><span class="step-num">3</span>Enter MAX (at limit exactly) → Submit (should succeed)</li><li><span class="step-num">4</span>Enter MAX-1 (just below limit) → Submit (should succeed)</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Values exceeding maximum: error message with maximum permitted value. MAX-1 and MAX accepted. MAX+1 rejected. No integer overflow or silent truncation. Server rejects overflow even if client-side accepts.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP08</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Identify business-defined maximum with the team before executing. Test equivalence partition: below max, at max, above max.</div></div>
+  </div>
+</div>
+
+<!-- TC12 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC12</span><span class="tc-title">Mixed Valid and Invalid Fields</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Input Validation — Mixed State</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter valid amounts for outlets 1, 2, 3</li><li><span class="step-num">2</span>Enter "N/A" in outlet 4</li><li><span class="step-num">3</span>Submit → observe error handling</li><li><span class="step-num">4</span>Correct only the invalid field → resubmit</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Only outlet 4 field highlighted as invalid. Outlets 1–3 retain their entered values. Error is field-specific. After correcting field 4 and resubmitting, transaction proceeds. Valid field values are never reset by partial validation failure.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP05</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Resetting all fields on partial error is a UX defect — log separately. This tests the validation engine's field isolation behaviour.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 3: INTEGRATION ═════════════════════════════════════════════ -->
+<div class="cat-header">🔌 CATEGORY 3 — QuickBooks Integration Failures <span class="cat-count">TC13–TC17</span></div>
+
+<!-- TC13 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC13</span><span class="tc-title">QuickBooks API — Completely Unreachable</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Integration Failure</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Valid form data. QuickBooks API endpoint blocked/offline. Record all company credit balances before test.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Block QuickBooks API via network config or environment setting</li><li><span class="step-num">2</span>Complete valid form and submit</li><li><span class="step-num">3</span>Observe retry attempts (should see 3 attempts with delays)</li><li><span class="step-num">4</span>After all retries fail, observe user message</li><li><span class="step-num">5</span>Query DB — verify all company credit balances unchanged</li><li><span class="step-num">6</span>Verify no QuickBooks record created</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">3 retry attempts made with exponential backoff. After all fail: user sees "Unable to connect to QuickBooks — reference: [Transaction ID]." SMS credits NOT applied. DB balances unchanged from before test. Admin alert triggered. Error logged with Transaction ID.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP10</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Verify DB state by querying before and after. Verify retry log shows exactly 3 attempts. Verify admin notification mechanism fires.</div></div>
+  </div>
+</div>
+
+<!-- TC14 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC14</span><span class="tc-title">QuickBooks API — Request Timeout</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Integration Failure</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Simulate API response delay beyond configured timeout (e.g. 30s+)</li><li><span class="step-num">2</span>Submit valid form</li><li><span class="step-num">3</span>Observe loading indicator during wait</li><li><span class="step-num">4</span>Observe timeout handling after threshold reached</li><li><span class="step-num">5</span>Verify UI remains responsive during timeout wait (no freeze)</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Loading indicator visible. UI remains responsive. On timeout: error displayed, retry triggered. After max retries: flow aborted, no SMS credits applied. Transaction logged as "Timeout — Aborted." Submit re-enabled.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP11</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Confirm timeout threshold is configurable (environment variable), not hardcoded. Record the actual timeout value in the test report.</div></div>
+  </div>
+</div>
+
+<!-- TC15 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC15</span><span class="tc-title">QuickBooks API — Returns 4xx / 5xx Error Response</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Integration Failure</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Trigger HTTP 400 response from QuickBooks → observe system</li><li><span class="step-num">2</span>Trigger HTTP 401 (auth failure) → observe system</li><li><span class="step-num">3</span>Trigger HTTP 422 (unprocessable) → observe system</li><li><span class="step-num">4</span>Trigger HTTP 500 (server error) → observe system</li><li><span class="step-num">5</span>Trigger HTTP 503 (service unavailable) → observe system</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">For each error code: system parses response, does NOT proceed to email or credit steps. User shown specific error message including error code. No QuickBooks record persisted. Full error response logged with Transaction ID. No unhandled exception reaches user.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP12</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Each error code should be tested separately. Log the actual error handling behaviour for each — some may need different user messages (e.g. 401 = "Authentication error, contact admin").</div></div>
+  </div>
+</div>
+
+<!-- TC16 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC16</span><span class="tc-title">Duplicate Quotation Prevention — Idempotency</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Integration — Idempotency</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5 (idempotent) → S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Submit a valid transaction → note Transaction ID and Quotation ID</li><li><span class="step-num">2</span>Immediately resubmit with the same Transaction ID</li><li><span class="step-num">3</span>Check QuickBooks — count quotation records for this transaction</li><li><span class="step-num">4</span>Check DB — verify credits not doubled</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Second submission detected as duplicate via Transaction ID. Existing quotation reference returned — no new invoice created. QuickBooks shows exactly 1 quotation. SMS credits not doubled. System returns the original quotation ID to the user.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP13</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Verify QuickBooks record count directly in QuickBooks portal/API. This is the key financial integrity idempotency test.</div></div>
+  </div>
+</div>
+
+<!-- TC17 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC17</span><span class="tc-title">QuickBooks API — Malformed / Unexpected Response</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Integration Failure</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Simulate API returning malformed JSON (missing required fields)</li><li><span class="step-num">2</span>Simulate API returning HTML instead of JSON</li><li><span class="step-num">3</span>Simulate API returning empty response body</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">System does not crash or throw unhandled exception. Parsing failure caught gracefully. Error message shown to user. Full malformed response body logged. No SMS credits applied. Transaction marked as failed with Transaction ID.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP14</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Prevents raw server errors reaching the user. Verify the error log contains the raw response for debugging.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 4: EMAIL ════════════════════════════════════════════════════ -->
+<div class="cat-header">📧 CATEGORY 4 — Email Service Failures <span class="cat-count">TC18–TC20</span></div>
+
+<!-- TC18 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC18</span><span class="tc-title">SMTP Service Unavailable During Email Send</span><span class="priority-badge p-medium">MEDIUM</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Email Failure — Non-Blocking</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S5→S6(fail)→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Disable SMTP service in environment</li><li><span class="step-num">2</span>Complete valid transaction through to quotation creation</li><li><span class="step-num">3</span>Observe email send attempt outcome</li><li><span class="step-num">4</span>Observe credit step — confirm it proceeds</li><li><span class="step-num">5</span>Verify email retry queue entry exists</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Email failure caught and logged. Transaction CONTINUES to credit step without being blocked. Finance Executive sees non-critical warning: "Email delivery failed — credit applied. Email will be retried." Retry queue entry created. SMS credit correctly applied. Transaction logged as SUCCESS with email_status=PENDING_RETRY.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP15</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Confirm email failure does NOT rollback credit. Verify retry queue entry is accessible. This validates the non-blocking architecture of the email step.</div></div>
+  </div>
+</div>
+
+<!-- TC19 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC19</span><span class="tc-title">Missing or Invalid Client Email in QuickBooks Record</span><span class="priority-badge p-medium">MEDIUM</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Email Failure — Data Quality</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S5→S6(null)→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Set QuickBooks client email to empty string → run transaction</li><li><span class="step-num">2</span>Set client email to null → run transaction</li><li><span class="step-num">3</span>Set client email to whitespace only → run transaction</li><li><span class="step-num">4</span>Set client email to "@" (invalid format) → run transaction</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">For all variants: system catches null/invalid email before attempting send. No SMTP exception thrown. Logged: "No valid client email on record — Transaction ID: [X]." Admin notified. Transaction continues to credit step. No system crash.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP16</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">A null pointer exception from an empty email field is a defect. Test each variant separately and log the exact behaviour.</div></div>
+  </div>
+</div>
+
+<!-- TC20 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC20</span><span class="tc-title">Email Content Accuracy Verification</span><span class="priority-badge p-medium">MEDIUM</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Email Content Validation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S6→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Run TC01 with known exact amounts</li><li><span class="step-num">2</span>Open received email</li><li><span class="step-num">3</span>Verify: Brand name, total amount, client name, Transaction ID, date</li><li><span class="step-num">4</span>Run a second transaction — verify email does not carry values from first</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Email contains correct Brand name, total matching QuickBooks quotation exactly, correct client name, correct Transaction ID, current date. No data from a previous transaction is present. No placeholder text (e.g. "[AMOUNT]") visible in email body.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP23</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Content validation — not just delivery. Stale data in email template is a medium-severity defect.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 5: DATABASE ════════════════════════════════════════════════ -->
+<div class="cat-header">🗄 CATEGORY 5 — Database &amp; Transaction Integrity <span class="cat-count">TC21–TC25</span></div>
+
+<!-- TC21 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC21</span><span class="tc-title">SMS Credit DB Write — Complete Failure</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Database Failure</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S6→S7→S8</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Record all company credit balances before test. Valid form. Quotation created. Email sent. DB write for credit intentionally fails (simulate via DB kill or write-block).</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Record credit balances for all relevant companies</li><li><span class="step-num">2</span>Complete all steps through email successfully</li><li><span class="step-num">3</span>Force DB write failure on credit step</li><li><span class="step-num">4</span>Observe system response and user message</li><li><span class="step-num">5</span>Query DB — compare balances to pre-test snapshot</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">ROLLBACK triggered. ALL company credit balances identical to pre-test values. No partial write remains. Error: "Credit could not be applied. Contact support. Ref: [Transaction ID]." Transaction log: status=FAILED_ROLLED_BACK. QuickBooks quotation flagged for manual review.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP17</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Must be verified at DB level with before/after snapshots. QuickBooks quotation remains — this should be documented as an orphaned record requiring manual handling.</div></div>
+  </div>
+</div>
+
+<!-- TC22 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC22</span><span class="tc-title">Partial Credit Applied — Mid-Transaction Failure</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Database Failure — Atomicity</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S7→S8 (mid-write)</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand with outlets across 3 Companies. All balances recorded before test. DB write configured to fail after Company A writes but before Company B.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Record balances for all 3 companies</li><li><span class="step-num">2</span>Submit valid transaction</li><li><span class="step-num">3</span>Force write failure after Company A credited but before Company B</li><li><span class="step-num">4</span>Query all 3 company balances</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">ROLLBACK reverses Company A's credit. All 3 companies show UNCHANGED balances identical to pre-test snapshot. System returns error — does not show success. Partial state completely eliminated. Transaction logged as ROLLED_BACK.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP18</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">THE most critical atomicity test. Must be verified directly at DB level. A partial write surviving = Critical defect requiring immediate block on release.</div></div>
+  </div>
+</div>
+
+<!-- TC23 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC23</span><span class="tc-title">Rollback Verification — DB State Confirmation</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Database Integrity</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S7→S8 (rollback)</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Take DB snapshot of all relevant company credit balances</li><li><span class="step-num">2</span>Run transaction — force credit failure</li><li><span class="step-num">3</span>ROLLBACK triggered</li><li><span class="step-num">4</span>Query all company balances and compare to snapshot</li><li><span class="step-num">5</span>Query transaction log for rollback entry</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">All company balances are byte-for-byte identical to pre-test snapshot. No residual writes. Transaction log entry: status=ROLLED_BACK, Transaction ID present, timestamp accurate. Log entry confirms which company writes were reversed.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP19</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">This test must be run at DB level only — UI cannot confirm rollback. Use SQL SELECT before and after to compare.</div></div>
+  </div>
+</div>
+
+<!-- TC24 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC24</span><span class="tc-title">Transaction Audit Log — Completeness Verification</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Database Integrity — Audit</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S9 (success log)</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Run TC01 (full successful transaction)</li><li><span class="step-num">2</span>Query transaction log table in DB</li><li><span class="step-num">3</span>Verify all required fields are present and correct</li><li><span class="step-num">4</span>Run TC21 (failed transaction) → verify failure log entry also created</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Success log contains: unique Transaction ID, Brand ID, total amount, QuickBooks quotation ID, timestamp, Finance Executive user ID, status=SUCCESS, per-company credit amounts. Failure log contains: Transaction ID, status=FAILED or ROLLED_BACK, error detail, timestamp.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP22</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Audit log is required for financial compliance and reconciliation. Missing any required field = Medium severity defect.</div></div>
+  </div>
+</div>
+
+<!-- TC25 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC25</span><span class="tc-title">Rollback Mechanism Failure — Admin Escalation</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Database Integrity — Edge Case</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S7→S8→(rollback fails)→Admin Alert</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Force credit write failure</li><li><span class="step-num">2</span>Simultaneously force rollback mechanism failure</li><li><span class="step-num">3</span>Observe system response</li><li><span class="step-num">4</span>Verify admin escalation triggered</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">System detects rollback failure. Admin escalation alert sent immediately (email/alert). Transaction flagged for manual review with full Transaction ID and context. System does NOT show success to user. DB inconsistency logged with maximum detail for manual reconciliation.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP17, FP19</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Extreme edge case but requires a fallback to exist. If no admin alert mechanism exists, this is a gap — log as a defect/recommendation.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 6: CONCURRENCY ══════════════════════════════════════════════ -->
+<div class="cat-header">🔄 CATEGORY 6 — Concurrency &amp; Duplicate Submission <span class="cat-count">TC26–TC28</span></div>
+
+<!-- TC26 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC26</span><span class="tc-title">Double-Click Rapid Submit — UI Duplicate Prevention</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Concurrency — UI</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S3→S4 (single path only)</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Open browser DevTools Network tab</li><li><span class="step-num">2</span>Complete valid form</li><li><span class="step-num">3</span>Double-click Submit within 500ms</li><li><span class="step-num">4</span>Count API requests in Network tab</li><li><span class="step-num">5</span>Count QuickBooks quotations created</li><li><span class="step-num">6</span>Count DB credit entries written</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Submit button disabled after first click. Exactly ONE API request sent to QuickBooks. Exactly ONE quotation created. Exactly ONE set of credits applied to companies. Button re-enabled only after full transaction result received.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP21</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Verify via DevTools — count POST requests. Any count > 1 = High severity defect. Common and frequently overlooked in financial systems.</div></div>
+  </div>
+</div>
+
+<!-- TC27 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC27</span><span class="tc-title">Two Finance Executives Submit Simultaneously — Same Brand</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Concurrency — Multi-User</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S9 (User A) | S4→S9 (User B) independently</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Open two authenticated Finance Executive sessions simultaneously</li><li><span class="step-num">2</span>Select same Brand in both sessions</li><li><span class="step-num">3</span>Enter different amounts in each session</li><li><span class="step-num">4</span>Submit both sessions within 2 seconds of each other</li><li><span class="step-num">5</span>Query DB: each company's balance should increase by the sum of BOTH submissions</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Both transactions completed independently and correctly. No data collision. Each company's final balance = starting balance + User A amount + User B amount. Two distinct Transaction IDs. Two separate QuickBooks quotations. Both audit log entries created. No credit from one transaction applied to wrong company.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP20</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Race condition detection: if both updates arrive simultaneously, row-level locking must prevent a lost update. Total DB balance must equal exact sum of both inputs.</div></div>
+  </div>
+</div>
+
+<!-- TC28 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC28</span><span class="tc-title">Resubmission After Error — No Duplicate Processing</span><span class="priority-badge p-high">HIGH</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Concurrency — Retry Safety</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S8 (first) → S4→S5→S9 (second)</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Force API failure on first submission → error shown → note Transaction ID 1</li><li><span class="step-num">2</span>Restore API → user clicks Submit again → note Transaction ID 2</li><li><span class="step-num">3</span>Verify Transaction IDs are different</li><li><span class="step-num">4</span>Verify only one QuickBooks quotation created</li><li><span class="step-num">5</span>Verify credits applied only once</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Transaction IDs 1 and 2 are different. First transaction in log: status=FAILED. Second transaction: status=SUCCESS. Exactly one QuickBooks quotation. Credits applied once. No double-credit scenario.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP13, FP21</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Tests the clean retry path. A new Transaction ID must be generated on each form submission attempt.</div></div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY 7: MULTI-COMPANY ════════════════════════════════════════════ -->
+<div class="cat-header">🏢 CATEGORY 7 — Multi-Company Allocation &amp; Mapping <span class="cat-count">TC29–TC30</span></div>
+
+<!-- TC29 -->
+<div class="tc-card">
+  <div class="tc-header"><span class="tc-id">TC29</span><span class="tc-title">Credits Split Correctly Across Multiple Companies</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Business Logic — Allocation</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S4→S5→S6→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Brand with 4 outlets: Outlet A + B → Company 1 | Outlet C → Company 2 | Outlet D → Company 3. Record all starting balances.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Enter: Outlet A=100, Outlet B=200, Outlet C=300, Outlet D=400</li><li><span class="step-num">2</span>Submit → complete full flow</li><li><span class="step-num">3</span>Query Company 1 balance: expected +300</li><li><span class="step-num">4</span>Query Company 2 balance: expected +300</li><li><span class="step-num">5</span>Query Company 3 balance: expected +400</li><li><span class="step-num">6</span>Verify no other company was affected</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">Company 1: +300 (A+B). Company 2: +300 (C). Company 3: +400 (D). QuickBooks quotation total: 1000. No other company balance changed. Zero cross-contamination between companies.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP09</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">THE most critical business logic test. Must be verified at DB level — UI display alone is insufficient. Any mismatch = Critical defect. Release blocker.</div></div>
+  </div>
+</div>
+
+<!-- TC30 -->
+<div class="tc-card" style="border-radius:0 0 8px 8px;">
+  <div class="tc-header"><span class="tc-id">TC30</span><span class="tc-title">Outlet-to-Company Mapping Consistency Check</span><span class="priority-badge p-critical">CRITICAL</span></div>
+  <div class="tc-body">
+    <div class="tc-field"><div class="field-label">Category</div><div class="field-value">Business Logic — Data Integrity</div></div>
+    <div class="tc-field"><div class="field-label">State Transition</div><div class="field-value"><span class="state-chip">S1→S2→S7→S9</span></div></div>
+    <div class="tc-field full-width"><div class="field-label">Precondition</div><div class="field-value">Known mapping in DB. Known brand loaded in UI. DB query access available.</div></div>
+    <div class="tc-field full-width"><div class="field-label">Test Steps</div><ul class="steps-list"><li><span class="step-num">1</span>Query DB: retrieve outlet-to-company mapping for test Brand</li><li><span class="step-num">2</span>Load same Brand in UI — compare outlet list to DB result</li><li><span class="step-num">3</span>Submit transaction with known amounts per outlet</li><li><span class="step-num">4</span>Query DB: verify each company credited matches exactly its DB-mapped outlets</li><li><span class="step-num">5</span>Verify no outlet present in DB is absent from UI (and vice versa)</li></ul></div>
+    <div class="tc-field full-width"><div class="field-label">Expected Result</div><div class="expected-box">UI outlet list matches DB mapping exactly — count and names identical. After submission: each company credited in DB corresponds exactly to its DB-mapped outlets. No credit directed to unmapped or incorrectly mapped company. Mapping used at transaction time matches DB snapshot taken at S4.</div></div>
+    <div class="tc-field"><div class="field-label">Failure Point Ref</div><div class="field-value">FP09</div></div>
+    <div class="tc-field"><div class="field-label">Notes</div><div class="notes-box">Run after any data migration, Brand restructure, or outlet reassignment. Mapping drift is a silent financial risk. This is a regression test that should run on every release cycle.</div></div>
+  </div>
+</div>
+
+<!-- ══ SUMMARY TABLE ════════════════════════════════════════════════════════ -->
+<div class="summary-section">
+  <div class="cat-header" style="margin-top:40px;border-radius:8px 8px 0 0;">📊 TEST CASE SUMMARY — ALL 30 TEST CASES</div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="width:70px">TC ID</th>
+        <th>Test Case Title</th>
+        <th style="width:90px">Priority</th>
+        <th style="width:160px">Category</th>
+        <th style="width:120px">State Covered</th>
+        <th style="width:80px">FP Ref</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>TC01</td><td>Complete Valid End-to-End Transaction</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Happy Path</td><td><span class="state-chip">S0→S9</span></td><td>—</td></tr>
+      <tr><td>TC02</td><td>Valid — Single Outlet / Single Company</td><td><span class="priority-badge p-high">HIGH</span></td><td>Happy Path</td><td><span class="state-chip">S0→S9</span></td><td>FP09</td></tr>
+      <tr><td>TC03</td><td>Valid — Maximum Outlets Per Brand</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Volume</td><td><span class="state-chip">S0→S9</span></td><td>FP07</td></tr>
+      <tr><td>TC04</td><td>No Brand Selected — Submit Attempt</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S0→S8</span></td><td>FP01</td></tr>
+      <tr><td>TC05</td><td>Empty Top-Up Field</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP03</td></tr>
+      <tr><td>TC06</td><td>Negative Number Input</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP04</td></tr>
+      <tr><td>TC07</td><td>Zero Value All Fields</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP06</td></tr>
+      <tr><td>TC08</td><td>Text / Alphabetic Input</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP05</td></tr>
+      <tr><td>TC09</td><td>Injection Attack Attempt</td><td><span class="priority-badge p-high">HIGH</span></td><td>Security</td><td><span class="state-chip">S3→S8</span></td><td>FP05</td></tr>
+      <tr><td>TC10</td><td>Decimal Precision Edge Cases</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Input Validation</td><td><span class="state-chip">S3→S4/S8</span></td><td>FP07</td></tr>
+      <tr><td>TC11</td><td>Overflow / Extremely Large Number</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP08</td></tr>
+      <tr><td>TC12</td><td>Mixed Valid &amp; Invalid Fields</td><td><span class="priority-badge p-high">HIGH</span></td><td>Input Validation</td><td><span class="state-chip">S3→S8</span></td><td>FP05</td></tr>
+      <tr><td>TC13</td><td>API Unreachable — Retry + Abort</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Integration</td><td><span class="state-chip">S5→S8</span></td><td>FP10</td></tr>
+      <tr><td>TC14</td><td>API Request Timeout</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Integration</td><td><span class="state-chip">S5→S8</span></td><td>FP11</td></tr>
+      <tr><td>TC15</td><td>API 4xx / 5xx Error Response</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Integration</td><td><span class="state-chip">S5→S8</span></td><td>FP12</td></tr>
+      <tr><td>TC16</td><td>Duplicate Quotation Prevention</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Integration</td><td><span class="state-chip">S5 idempotent</span></td><td>FP13</td></tr>
+      <tr><td>TC17</td><td>Malformed API Response</td><td><span class="priority-badge p-high">HIGH</span></td><td>Integration</td><td><span class="state-chip">S5→S8</span></td><td>FP14</td></tr>
+      <tr><td>TC18</td><td>SMTP Service Unavailable</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Email</td><td><span class="state-chip">S6→S8(email)→S9</span></td><td>FP15</td></tr>
+      <tr><td>TC19</td><td>Missing / Invalid Client Email</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Email</td><td><span class="state-chip">S6→S8(email)→S9</span></td><td>FP16</td></tr>
+      <tr><td>TC20</td><td>Email Content Accuracy</td><td><span class="priority-badge p-medium">MEDIUM</span></td><td>Email</td><td><span class="state-chip">S6→S9</span></td><td>FP23</td></tr>
+      <tr><td>TC21</td><td>SMS Credit DB Write — Full Failure</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Database</td><td><span class="state-chip">S7→S8</span></td><td>FP17</td></tr>
+      <tr><td>TC22</td><td>Partial Credit Mid-Transaction</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Database</td><td><span class="state-chip">S7→S8</span></td><td>FP18</td></tr>
+      <tr><td>TC23</td><td>Rollback DB State Verification</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Database</td><td><span class="state-chip">S7→S8</span></td><td>FP19</td></tr>
+      <tr><td>TC24</td><td>Audit Log Completeness</td><td><span class="priority-badge p-high">HIGH</span></td><td>Database</td><td><span class="state-chip">S9</span></td><td>FP22</td></tr>
+      <tr><td>TC25</td><td>Rollback Mechanism Failure</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Database</td><td><span class="state-chip">S8→Admin</span></td><td>FP17, FP19</td></tr>
+      <tr><td>TC26</td><td>Double-Click Submit Prevention</td><td><span class="priority-badge p-high">HIGH</span></td><td>Concurrency</td><td><span class="state-chip">S4→S9 (×1)</span></td><td>FP21</td></tr>
+      <tr><td>TC27</td><td>Simultaneous Multi-User Submission</td><td><span class="priority-badge p-high">HIGH</span></td><td>Concurrency</td><td><span class="state-chip">S4→S9 (×2)</span></td><td>FP20</td></tr>
+      <tr><td>TC28</td><td>Resubmission After Error</td><td><span class="priority-badge p-high">HIGH</span></td><td>Concurrency</td><td><span class="state-chip">S8→S9</span></td><td>FP13, FP21</td></tr>
+      <tr><td>TC29</td><td>Credits Split Across Companies</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Allocation</td><td><span class="state-chip">S4→S9</span></td><td>FP09</td></tr>
+      <tr><td>TC30</td><td>Mapping Consistency Check</td><td><span class="priority-badge p-critical">CRITICAL</span></td><td>Allocation</td><td><span class="state-chip">S2→S9</span></td><td>FP09</td></tr>
+      <tr>
+        <td colspan="2" style="font-weight:700;color:#1B3A6B;">TOTAL: 30 Test Cases</td>
+        <td colspan="4" style="font-weight:700;color:#1B3A6B;">10 CRITICAL &nbsp;|&nbsp; 15 HIGH &nbsp;|&nbsp; 5 MEDIUM &nbsp;|&nbsp; All 10 States Covered</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer-note">
+  GoSMS QA Test Plan — Complete Test Case Tables | MikeTango / QuickBooks Integration | QA Engineer Candidate | v1.0
+</div>
+
+</body>
+</html>
